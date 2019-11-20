@@ -1,6 +1,7 @@
 import jieba
 from gensim.models.word2vec import Word2Vec
 import random
+import re
 
 
 # 获取词向量：
@@ -9,7 +10,9 @@ def get_word2vec(word2vec_path):
     return word2vec
 
 
-def cut(string): return jieba.lcut(string)
+def cut(string): return jieba.lcut(string.strip().replace(' ', ''))
+
+def token(string): return ''.join(re.findall(r'[\d|\w]+', string))
 
 
 def get_stopwords(stopwords_path):
@@ -28,7 +31,7 @@ def remove_stopwords(sentence, stopwords):
     return sentence_cut_stopwords
 
 
-def findKsmallest(nums, k):
+def topk(nums, k, mode='smallest'):
     def partition(left, right, pivot_index):
         pivot = nums[pivot_index][0]
         # 1. move pivot to end
@@ -37,30 +40,34 @@ def findKsmallest(nums, k):
         # 2. move all smaller elements to the left
         store_index = left
         for i in range(left, right):
-            if nums[i][0] < pivot:
-                nums[store_index], nums[i] = nums[i], nums[store_index]
-                store_index += 1
+            if mode == 'smallest':
+                if nums[i][0] < pivot:
+                    nums[store_index], nums[i] = nums[i], nums[store_index]
+                    store_index += 1
+            elif mode == 'largest':
+                if nums[i][0] > pivot:
+                    nums[store_index], nums[i] = nums[i], nums[store_index]
+                    store_index += 1
+            else:
+                raise Exception('Please input right mode: largest or smallest')
         # 3. move pivot to its final place
         nums[right], nums[store_index] = nums[store_index], nums[right]
         return store_index
 
-    def select(left, right, k_largest):
-        #         if (right - left) < k_largest:
-        #             return nums
-
+    def select(left, right, k, mode):
         pivot_index = random.randint(left, right)
         pivot_index = partition(left, right, pivot_index)
 
-        if k_largest == pivot_index:
-            return nums[:k_largest]
-        elif k_largest < pivot_index:
-            return select(left, pivot_index - 1, k_largest)
+        if k == pivot_index:
+            return nums[:k]
+        elif k < pivot_index:
+            return select(left, pivot_index - 1, k, mode)
         else:
-            return select(pivot_index + 1, right, k_largest)
+            return select(pivot_index + 1, right, k, mode)
 
     if len(nums) <= k:
         return nums
-    return select(0, len(nums) - 1, k)
+    return select(0, len(nums) - 1, k, mode)
 
 
 if __name__ == '__main__':
@@ -69,6 +76,7 @@ if __name__ == '__main__':
     # stopwords_path = os.path.join(root_path, 'dataset', 'stop_words.txt')
     # stopwords = get_stopwords(stopwords_path)
     # print(stopwords)
-    print(findKsmallest([(3, 'question1', 'answer1'), (2, 'question2', 'answer2'), (3, 'question3', 'answer3'),
+    # print('保险' in stopwords)
+    print(topk([(3, 'question1', 'answer1'), (2, 'question2', 'answer2'), (3, 'question3', 'answer3'),
                          (1, 'question4', 'answer4'), (2, 'question5', 'answer5'), (4, 'question6', 'answer6'),
-                         (5, 'question7', 'answer7'), (5, 'question8', 'answer8'), (6, 'question9', 'answer9')], 4))
+                         (5, 'question7', 'answer7'), (5, 'question8', 'answer8'), (6, 'question9', 'answer9')], 4, mode='largest'))
