@@ -18,7 +18,10 @@ def get_code(query, vocab_path):
     vocab = Vocab(vocab_path)
     code = 0
     for word in query:
-        _id = vocab.word_to_id(word)
+        try:
+            _id = vocab.word_to_id(word)
+        except:
+            continue
         code |= 1 << _id
     return code
 
