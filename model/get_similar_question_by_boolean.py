@@ -1,4 +1,4 @@
-from model.utils import cut, token, topk
+from model.utils import cut, topk
 import pandas as pd
 from model.get_similar_question_by_edit_distance import Edit_Distance
 
@@ -19,7 +19,7 @@ def get_code(query, vocab):
 
 def get_similiar_qa(query, vocab, qa_path, q_codes, k):
     qa = pd.read_csv(qa_path)
-    query = token(query)
+    # query = token(query)
     query_code = get_code(query, vocab)
 
     res = []
