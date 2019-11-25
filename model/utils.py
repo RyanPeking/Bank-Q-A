@@ -54,20 +54,20 @@ def topk(nums, k, mode='smallest'):
         nums[right], nums[store_index] = nums[store_index], nums[right]
         return store_index
 
-    def select(left, right, k, mode):
+    def select(left, right, k):
         pivot_index = random.randint(left, right)
         pivot_index = partition(left, right, pivot_index)
 
         if k == pivot_index:
             return nums[:k]
         elif k < pivot_index:
-            return select(left, pivot_index - 1, k, mode)
+            return select(left, pivot_index - 1, k)
         else:
-            return select(pivot_index + 1, right, k, mode)
+            return select(pivot_index + 1, right, k)
 
     if len(nums) <= k:
         return nums
-    return select(0, len(nums) - 1, k, mode)
+    return select(0, len(nums) - 1, k)
 
 
 if __name__ == '__main__':
