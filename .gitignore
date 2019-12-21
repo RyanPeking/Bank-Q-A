@@ -1,0 +1,8 @@
+*.csv
+*.pickle
+.idea
+__pycache__
+.DS_Store
+*.ipynb
+*.hdf5
+dataset/
