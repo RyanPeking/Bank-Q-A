@@ -6,7 +6,9 @@
 
 ### 项目展示
 - 网址http://39.100.3.165:34000/#/
+
 - 效果：
+
 ![image](https://github.com/RyanPeking/Bank-Q-A/blob/master/img/img.png)
 
 ### 本地运行步骤
