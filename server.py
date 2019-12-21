@@ -30,7 +30,7 @@ def message_received(client, server, message):
     server.send_message(client, "robot: " + msg)
 
 print('server connecting...')
-PORT=9001
+PORT=33333
 server = WebsocketServer(PORT,host="127.0.0.1")
 server.set_fn_new_client(new_client)
 server.set_fn_client_left(client_left)
